@@ -1,0 +1,6 @@
+-js bin/app.js
+-main App
+-cp src
+-cp ../../lib/om.text/src
+-dce full
+#-lib om.text
