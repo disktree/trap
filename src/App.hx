@@ -3,41 +3,55 @@ import js.Browser.document;
 import js.Browser.window;
 import js.html.Element;
 import js.html.InputElement;
-import om.text.TheTrap;
+import js.html.SelectElement;
+import om.text.Encoder;
 
 class App {
 
+	static var select : SelectElement;
 	static var input : InputElement;
 	static var output : Element;
+	static var encoder : Encoder;
 
-	static function format() {
+	static function update() {
 		var str : String = input.value;
-		if( str.length == 0 ) {
-			output.textContent = '';
-		} else {
-			var result = TheTrap.convert( str );
-			output.textContent = result;
+		output.textContent = (str.length == 0) ? '' : encoder.encode( str );
+	}
+
+	static function getEncoder( name : String ) : om.text.Encoder {
+		return switch name {
+		case 'creepy': new om.text.Creepy();
+		case 'fliprotate': new om.text.FlipRotate();
+		case 'mirror': new om.text.Mirror();
+		case 'trap',_: new om.text.TheTrap();
 		}
 	}
 
 	static function handleTextInput(e) {
-		format();
+		update();
+	}
+
+	static function handleEncoderChange(e) {
+		encoder = getEncoder( select.value );
+		update();
 	}
 
 	static function main() {
 
 		window.onload = function() {
 
-			input = cast document.getElementById( 'input' );
+			select = cast document.getElementById( 'encoding' );
 			output = document.getElementById( 'output' );
+			input = cast document.getElementById( 'input' );
+			input.focus();
 
-			var textarea = document.getElementById( 'input' );
-			textarea.focus();
+			encoder = getEncoder( select.value );
 
-			format();
+			update();
 
-			textarea.addEventListener( 'input', handleTextInput, false );
+			input.addEventListener( 'input', handleTextInput, false );
+			select.addEventListener( 'change', handleEncoderChange, false );
 		}
 	}
-	
+
 }
