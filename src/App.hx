@@ -3,54 +3,51 @@ import js.Browser.document;
 import js.Browser.window;
 import js.html.Element;
 import js.html.InputElement;
-import js.html.SelectElement;
 import om.text.Encoder;
 
 class App {
 
-	static var select : SelectElement;
 	static var input : InputElement;
-	static var output : Element;
-	static var encoder : Encoder;
-
-	static function update() {
-		var str : String = input.value;
-		output.textContent = (str.length == 0) ? '' : encoder.encode( str );
-	}
-
-	static function getEncoder( name : String ) : om.text.Encoder {
-		return switch name {
-		case 'creepy': new om.text.Creepy();
-		case 'fliprotate': new om.text.FlipRotate();
-		case 'mirror': new om.text.Mirror();
-		case 'trap',_: new om.text.TheTrap();
-		}
-	}
+	static var outputs : Element;
+	static var encoders : Map<String,Encoder>;
 
 	static function handleTextInput(e) {
-		update();
-	}
-
-	static function handleEncoderChange(e) {
-		encoder = getEncoder( select.value );
-		update();
+		var str : String = input.value;
+		if( str.length > 0 ) {
+			for( k=>v in encoders ) {
+				e.textContent = document.getElementById( k ).encode( str );
+			}
+		} else {
+			for( k in encoders.keys() ) {
+				document.getElementById( k ).textContent = '';
+			}
+		}
 	}
 
 	static function main() {
 
 		window.onload = function() {
 
-			select = cast document.getElementById( 'encoding' );
-			output = document.getElementById( 'output' );
+			outputs = document.getElementById( 'outputs' );
+
 			input = cast document.getElementById( 'input' );
+			input.addEventListener( 'input', handleTextInput, false );
 			input.focus();
 
-			encoder = getEncoder( select.value );
+			encoders = [
+				'fliprotate' => new om.text.FlipRotate(),
+				'mirror' => new om.text.Mirror(),
+				'trap' => new om.text.TheTrap(),
+				'creepy' => new om.text.Creepy(),
+			];
 
-			update();
-
-			input.addEventListener( 'input', handleTextInput, false );
-			select.addEventListener( 'change', handleEncoderChange, false );
+			for( k=>v in encoders ) {
+				trace(k,v);
+				var e = document.createDivElement();
+				e.classList.add( 'encoder' );
+				e.id = k;
+				outputs.appendChild( e );
+			}
 		}
 	}
 

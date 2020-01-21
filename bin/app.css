@@ -8,37 +8,27 @@ body {
 	margin: 0;
 	padding: 0;
 	font-size: 14px;
+	background: #000;
+	color: #fff;
+}
+
+
+input {
 	font-family: monospace;
-	background: #141419;
-	color: #f0f0f0;
-}
-
-form {
-	margin: 10px;
-	width: 100%;
-}
-
-select {
-	display: inline-block;
 }
 
 #input {
-	display: inline-block;
-	width: 70%;
-	/*
-	margin: 0px;
-	*/
+	background: #fff;
+	color: #000;
+	margin: 10px;
 	padding: 10px;
-	border: none;
-	font-size: 14px;
-	font-family: sans;
-	background: #000;
-	color: #f0f0f0;
+	font-size: 1rem;
 }
 
-#output {
-	margin: 30px 10px 10px 10px;
-	padding: 10px;
-	font-family: sans;
-	font-size: 20px;
+#outputs .encoder {
+	background: #fff;
+	color: #000;
+	margin: 10px;
+	padding: 30px;
+	font-size: 2rem;
 }
