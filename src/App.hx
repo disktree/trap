@@ -15,11 +15,12 @@ class App {
 		var str : String = input.value;
 		if( str.length > 0 ) {
 			for( k=>v in encoders ) {
-				e.textContent = document.getElementById( k ).encode( str );
+				untyped document.getElementById( k ).value = v.encode( str );
+				//e.textContent = document.getElementById( k ).encode( str );
 			}
 		} else {
 			for( k in encoders.keys() ) {
-				document.getElementById( k ).textContent = '';
+				untyped document.getElementById( k ).value = '';
 			}
 		}
 	}
@@ -32,6 +33,11 @@ class App {
 
 			input = cast document.getElementById( 'input' );
 			input.addEventListener( 'input', handleTextInput, false );
+			input.onclick = function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				input.select();
+			}
 			input.focus();
 
 			encoders = [
@@ -42,11 +48,18 @@ class App {
 			];
 
 			for( k=>v in encoders ) {
-				trace(k,v);
-				var e = document.createDivElement();
-				e.classList.add( 'encoder' );
-				e.id = k;
-				outputs.appendChild( e );
+				//trace(k,v);
+				var input = document.createInputElement();
+				input.type = "text";
+				input.id = k;
+				input.setAttribute( 'readonly', '' );
+				input.classList.add( 'encoder' );
+				input.onclick = function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					input.select();
+				}
+				outputs.appendChild( input );
 			}
 		}
 	}

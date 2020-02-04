@@ -3,3 +3,4 @@
 -cp src
 -lib om.text
 -dce full
+-D source-header=
